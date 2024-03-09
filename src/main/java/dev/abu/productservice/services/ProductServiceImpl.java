@@ -71,4 +71,14 @@ public class ProductServiceImpl implements ProductService{
          Product product = productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException("There is no Product with id : "+id));
         return product;
     }
+
+    @Override
+    public List<Product> getProductByCategory(String category) throws ProductNotFoundException {
+        List<Product> listOfProducts = productRepo.findProductByCategory(category);
+        if(listOfProducts.isEmpty()){
+            throw new ProductNotFoundException("There is no product with Category : "+category);
+        }
+        return listOfProducts;
+
+    }
 }

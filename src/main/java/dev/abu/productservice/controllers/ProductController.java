@@ -46,29 +46,28 @@ public ProductController(ProductService productService){
     HttpHeaders httpHeaders  =  new HttpHeaders() ;
     httpHeaders.add("Desc" , "Deleting Product with Id : "+id);
     productService.deleteProduct(id);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(httpHeaders,HttpStatus.OK);
     }
 
      @GetMapping("/Products")
      ResponseEntity<List<Product>> getAll() {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add("Desc" ,"Getting all product");
-    return new ResponseEntity<>(productService.getAll(),HttpStatus.OK);
+    return new ResponseEntity<>(productService.getAll(),httpHeaders,HttpStatus.OK);
     }
 
     @GetMapping("/Products/{id}")
     ResponseEntity< Product> getById(@PathVariable Long id) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add("Desc" ,"Getting Product with Id : "+id);
-    return new ResponseEntity<>(productService.getById(id),HttpStatus.OK);
+    return new ResponseEntity<>(productService.getById(id),httpHeaders,HttpStatus.OK);
     }
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    ResponseEntity<ErrorDto> handleException(ProductNotFoundException productNotFoundException){
-     ErrorDto dto = new ErrorDto();
-     HttpHeaders  httpHeaders = new HttpHeaders();
-     httpHeaders.add("Desc","Product Not Found Exception ");
-     dto.setMessage(productNotFoundException.getMessage());
-     return new ResponseEntity<>(dto,HttpStatus.NOT_FOUND);
-}
+    @GetMapping("/Products/Category/{category}")
+    ResponseEntity<List<Product>> getProductByCategory(@PathVariable String category){
+    HttpHeaders  httpHeaders = new HttpHeaders();
+    httpHeaders.add("Desc" ,"Getting All product with Category : "+category);
+    return new ResponseEntity<>(productService.getProductByCategory(category),httpHeaders,HttpStatus.OK);
+    }
+
 }
